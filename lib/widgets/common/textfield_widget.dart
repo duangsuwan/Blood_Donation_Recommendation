@@ -4,10 +4,11 @@ import 'package:blood_donation_recommendation/constants/colors.dart';
 class TextFieldWidget extends StatelessWidget {
   final TextEditingController? dataController;
   final String fieldName;
-  final Icon? fieldIcon;
+  final Widget? fieldIcon;
   final bool isTextHidden;
   final bool isDataValid;
   final String? errorMessage;
+  final TextInputType? fieldType;
 
   const TextFieldWidget(
     this.fieldName,
@@ -17,6 +18,7 @@ class TextFieldWidget extends StatelessWidget {
       this.isTextHidden = false,
       this.isDataValid = true,
       this.errorMessage,
+      this.fieldType,
       super.key
     }
   );
@@ -26,6 +28,7 @@ class TextFieldWidget extends StatelessWidget {
     double borderRadius = 20;
     return TextField(
       controller: dataController,
+      keyboardType: fieldType,
       obscureText: isTextHidden,
       decoration: InputDecoration(
           errorText: isDataValid ? null : errorMessage,

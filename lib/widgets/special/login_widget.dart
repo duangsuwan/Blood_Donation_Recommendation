@@ -1,6 +1,7 @@
 import 'package:blood_donation_recommendation/constants/colors.dart';
 import 'package:blood_donation_recommendation/constants/routes.dart';
 import 'package:blood_donation_recommendation/constants/sizes.dart';
+import 'package:blood_donation_recommendation/constants/messages.dart';
 import 'package:blood_donation_recommendation/views/forgot_password_page.dart';
 import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,9 @@ class _LogInWidgetState extends State<LogInWidget> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
-  String emailAddress = "";
-  String password = "";
+  String _emailAddress = "";
+  String _password = "";
+  bool _isPasswordHidden = true;
 
   @override
   void initState() {
@@ -28,13 +30,13 @@ class _LogInWidgetState extends State<LogInWidget> {
     _emailController = TextEditingController()
       ..addListener(() {
         setState(() {
-          emailAddress = _emailController.text.trim();
+          _emailAddress = _emailController.text.trim();
         });
       });
     _passwordController = TextEditingController()
       ..addListener(() {
         setState(() {
-          password = _passwordController.text.trim();
+          _password = _passwordController.text.trim();
         });
       });
   }
@@ -55,6 +57,9 @@ class _LogInWidgetState extends State<LogInWidget> {
           TextFieldWidget(
             "Enter your email address",
             dataController: _emailController,
+            isDataValid: UserVerification.isEmailAddressValid(_emailAddress),
+            errorMessage: errorMessageEmailAddress,
+            fieldType: TextInputType.emailAddress,
           ),
           const SizedBox(
             height: 15,
@@ -62,7 +67,15 @@ class _LogInWidgetState extends State<LogInWidget> {
           TextFieldWidget(
             "Enter your password",
             dataController: _passwordController,
-            isTextHidden: true,
+            isTextHidden: _isPasswordHidden,
+            fieldIcon: IconButton(
+              onPressed: () {
+                setState(() {
+                  _isPasswordHidden = !_isPasswordHidden;
+                });
+              },
+              icon: UserDecoration.getPrimaryPasswordIcon(_isPasswordHidden),
+            ),
           ),
           const SizedBox(
             height: 25,
@@ -94,7 +107,7 @@ class _LogInWidgetState extends State<LogInWidget> {
               textSize: mainButtonSize,
               textWeight: FontWeight.bold,
               onPressed: tryLogIn,
-              isDisabled: !UserVerification.isLogInFormValid(emailAddress, password),
+              isDisabled: !UserVerification.isLogInFormValid(_emailAddress, _password),
             ),
           ),
           const SizedBox(

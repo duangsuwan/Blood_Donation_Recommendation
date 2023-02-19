@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:blood_donation_recommendation/constants/icons.dart';
+import 'package:blood_donation_recommendation/constants/messages.dart';
 
 class UserVerification {
 
@@ -11,9 +12,6 @@ class UserVerification {
   }
 
   static bool isEmailAddressValid(String emailAddress, {bool skipEmpty = true}) {
-    RegExp emailRegularExpression = RegExp(
-        r"^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+(\.[a-zA-Z0-9_-]+)*@[^-][a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,5})$");
-
     if (emailRegularExpression.hasMatch(emailAddress) ||
         (skipEmpty && emailAddress.isEmpty)) {
       return true;
@@ -21,20 +19,17 @@ class UserVerification {
     return false;
   }
 
-  static bool isFirstPasswordValid(String firstPassword, {bool skipEmpty = true}) {
-    RegExp passwordRegularExpression =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!%@#\$&*~]).{8,}$');
-
-    if (passwordRegularExpression.hasMatch(firstPassword) ||
-        (skipEmpty && firstPassword.isEmpty)) {
+  static bool isPrimaryPasswordValid(String primaryPassword, {bool skipEmpty = true}) {
+    if (passwordRegularExpression.hasMatch(primaryPassword) ||
+        (skipEmpty && primaryPassword.isEmpty)) {
       return true;
     }
     return false;
   }
 
-  static bool isSecondPasswordValid(String firstPassword, String secondPassword, {bool skipEmpty = true}) {
-    if (firstPassword == secondPassword ||
-        (skipEmpty && secondPassword.isEmpty)) {
+  static bool isSecondaryPasswordValid(String primaryPassword, String secondaryPassword, {bool skipEmpty = true}) {
+    if (primaryPassword == secondaryPassword ||
+        (skipEmpty && secondaryPassword.isEmpty)) {
       return true;
     }
     return false;
@@ -47,20 +42,11 @@ class UserVerification {
     return false;
   }
   
-  static Icon? getSecondPasswordIcon(String firstPassword, String secondPassword, {bool skipEmpty = true}) {
-    if (secondPassword.isEmpty) {
-      return null;
-    } else if (isSecondPasswordValid(firstPassword, secondPassword)) {
-      return checkIcon;
-    }
-    return crossIcon;
-  }
-
-  static bool isRegisterFormValid(String fullName, String emailAddress, String firstPassword, String secondPassword, bool userAgreementChecked) {
+  static bool isRegisterFormValid(String fullName, String emailAddress, String primaryPassword, String secondaryPassword, bool userAgreementChecked) {
     if ( isFullNameValid(fullName, skipEmpty: false) &&
          isEmailAddressValid(emailAddress, skipEmpty: false) &&
-         isFirstPasswordValid(firstPassword, skipEmpty: false) &&
-         isSecondPasswordValid(firstPassword, secondPassword, skipEmpty: false) &&
+         isPrimaryPasswordValid(primaryPassword, skipEmpty: false) &&
+         isSecondaryPasswordValid(primaryPassword, secondaryPassword, skipEmpty: false) &&
          isUserAgreementChecked(userAgreementChecked) ) {
       return true;
     }
@@ -68,10 +54,30 @@ class UserVerification {
   }
   
   static bool isLogInFormValid(String emailAddress, String password) {
-    if (emailAddress.isNotEmpty && password.isNotEmpty) {
+    if (isEmailAddressValid(emailAddress, skipEmpty: false) && password.isNotEmpty) {
       return true;
     }
     return false;
+  }
+
+}
+
+class UserDecoration {
+
+  static Icon getPrimaryPasswordIcon(bool isPasswordHidden) {
+    if (isPasswordHidden) {
+      return invisibleEyeIcon;
+    }
+    return visibleEyeIcon;
+  }
+  
+  static Icon? getSecondaryPasswordIcon(String primaryPassword, String secondaryPassword) {
+    if (secondaryPassword.isEmpty) {
+      return null;
+    } else if (UserVerification.isSecondaryPasswordValid(primaryPassword, secondaryPassword)) {
+      return checkIcon;
+    }
+    return crossIcon;
   }
 
 }

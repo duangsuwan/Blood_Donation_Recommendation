@@ -1,5 +1,6 @@
 import 'package:blood_donation_recommendation/constants/routes.dart';
 import 'package:blood_donation_recommendation/constants/sizes.dart';
+import 'package:blood_donation_recommendation/constants/messages.dart';
 import 'package:blood_donation_recommendation/controllers/user_controller.dart';
 import 'package:blood_donation_recommendation/views/user_agreement_page.dart';
 import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.dart';
@@ -19,13 +20,15 @@ class RegisterWidget extends StatefulWidget {
 class _RegisterWidgetState extends State<RegisterWidget> {
   late final TextEditingController _nameController;
   late final TextEditingController _emailController;
-  late final TextEditingController _firstPasswordController;
-  late final TextEditingController _secondPasswordController;
-  String fullName = "";
-  String emailAddress = "";
-  String firstPassword = "";
-  String secondPassword = "";
-  bool userAgreementChecked = false;
+  late final TextEditingController _primaryPasswordController;
+  late final TextEditingController _secondaryPasswordController;
+  
+  String _fullName = "";
+  String _emailAddress = "";
+  String _primaryPassword = "";
+  String _secondaryPassword = "";
+  bool _userAgreementChecked = false;
+  bool _isPasswordHidden = true;
 
   @override
   void initState() {
@@ -33,25 +36,25 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     _nameController = TextEditingController()
       ..addListener(() {
         setState(() {
-          fullName = _nameController.text.trim();
+          _fullName = _nameController.text.trim();
         });
       });
     _emailController = TextEditingController()
       ..addListener(() {
         setState(() {
-          emailAddress = _emailController.text.trim();
+          _emailAddress = _emailController.text.trim();
         });
       });
-    _firstPasswordController = TextEditingController()
+    _primaryPasswordController = TextEditingController()
       ..addListener(() {
         setState(() {
-          firstPassword = _firstPasswordController.text.trim();
+          _primaryPassword = _primaryPasswordController.text.trim();
         });
       });
-    _secondPasswordController = TextEditingController()
+    _secondaryPasswordController = TextEditingController()
       ..addListener(() {
         setState(() {
-          secondPassword = _secondPasswordController.text.trim();
+          _secondaryPassword = _secondaryPasswordController.text.trim();
         });
       });
   }
@@ -61,8 +64,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     super.dispose();
     _nameController.dispose();
     _emailController.dispose();
-    _firstPasswordController.dispose();
-    _secondPasswordController.dispose();
+    _primaryPasswordController.dispose();
+    _secondaryPasswordController.dispose();
   }
 
   @override
@@ -74,8 +77,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           TextFieldWidget(
             "Enter your full name",
             dataController: _nameController,
-            isDataValid: UserVerification.isFullNameValid(fullName),
-            errorMessage: "Invalid Name: Must be at least 3 characters in length",
+            isDataValid: UserVerification.isFullNameValid(_fullName),
+            errorMessage: errorMessageFullName,
           ),
           const SizedBox(
             height: 15,
@@ -83,41 +86,49 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           TextFieldWidget(
             "Enter your email address",
             dataController: _emailController,
-            isDataValid: UserVerification.isEmailAddressValid(emailAddress),
-            errorMessage: "Invalid Email Address",
+            isDataValid: UserVerification.isEmailAddressValid(_emailAddress),
+            errorMessage: errorMessageEmailAddress,
+            fieldType: TextInputType.emailAddress,
           ),
           const SizedBox(
             height: 15,
           ),
           TextFieldWidget(
             "Enter your password",
-            dataController: _firstPasswordController,
-            isDataValid: UserVerification.isFirstPasswordValid(firstPassword),
-            errorMessage:
-                "Password must be at least 8 characters in length and contain at least one uppercase letter, lowercase letter, digit, and special character (!, %, @, #, \\, \$, &, *, or ~)",
-            isTextHidden: true,
+            dataController: _primaryPasswordController,
+            isDataValid: UserVerification.isPrimaryPasswordValid(_primaryPassword),
+            errorMessage: errorMessagePrimaryPassword,
+            isTextHidden: _isPasswordHidden,
+            fieldIcon: IconButton(
+              onPressed: () {
+                setState(() {
+                  _isPasswordHidden = !_isPasswordHidden;
+                });
+              },
+              icon: UserDecoration.getPrimaryPasswordIcon(_isPasswordHidden),
+            ),
           ),
           const SizedBox(
             height: 15,
           ),
           TextFieldWidget(
             "Confirm your password",
-            dataController: _secondPasswordController,
-            isDataValid: UserVerification.isSecondPasswordValid(firstPassword, secondPassword),
-            errorMessage: "Password Mismatch",
+            dataController: _secondaryPasswordController,
+            isDataValid: UserVerification.isSecondaryPasswordValid(_primaryPassword, _secondaryPassword),
+            errorMessage: errorMessageSecondaryPassword,
             isTextHidden: true,
-            fieldIcon: UserVerification.getSecondPasswordIcon(firstPassword, secondPassword),
+            fieldIcon: UserDecoration.getSecondaryPasswordIcon(_primaryPassword, _secondaryPassword),
           ),
           const SizedBox(
             height: 15,
           ),
           SizedBox(
             child: CheckboxListTile(
-              value: userAgreementChecked,
+              value: _userAgreementChecked,
               controlAffinity: ListTileControlAffinity.leading,
               onChanged: (bool? value) {
                 setState(() {
-                  userAgreementChecked = value!;
+                  _userAgreementChecked = value!;
                 });
               },
               title: RichText(
@@ -160,7 +171,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               textSize: mainButtonSize,
               textWeight: FontWeight.bold,
               onPressed: tryRegister,
-              isDisabled: !UserVerification.isRegisterFormValid(fullName, emailAddress, firstPassword, secondPassword, userAgreementChecked),
+              isDisabled: !UserVerification.isRegisterFormValid(_fullName, _emailAddress, _primaryPassword, _secondaryPassword, _userAgreementChecked),
             ),
           ),
           const SizedBox(
