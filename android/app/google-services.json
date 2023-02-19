@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "927569126854",
+    "project_id": "blood-donation-recommendation",
+    "storage_bucket": "blood-donation-recommendation.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927569126854:android:5325c1781237187a7ffec7",
+        "android_client_info": {
+          "package_name": "com.okstate.dsuwanv.blood_donation_recommendation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927569126854-u255mojf0kr2fu7e6v29if0pkubakohq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDryJSp-tOaSFLhhJIFN5x2ZBIrm2cjUDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927569126854-u255mojf0kr2fu7e6v29if0pkubakohq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "927569126854-j88muue63v7hudfiqen48ha002h3tmoq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.okstate.dsuwanv.bloodDonationRecommendation"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
