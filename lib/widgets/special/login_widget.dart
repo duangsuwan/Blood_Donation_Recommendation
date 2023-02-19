@@ -6,6 +6,7 @@ import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.da
 import 'package:flutter/material.dart';
 import 'package:blood_donation_recommendation/widgets/common/textfield_widget.dart';
 import 'package:blood_donation_recommendation/widgets/common/button_widget.dart';
+import 'package:blood_donation_recommendation/controllers/user_controller.dart';
 
 class LogInWidget extends StatefulWidget {
   const LogInWidget({super.key});
@@ -93,7 +94,7 @@ class _LogInWidgetState extends State<LogInWidget> {
               textSize: mainButtonSize,
               textWeight: FontWeight.bold,
               onPressed: tryLogIn,
-              isDisabled: !isFormValid(),
+              isDisabled: !UserVerification.isLogInFormValid(emailAddress, password),
             ),
           ),
           const SizedBox(
@@ -118,13 +119,6 @@ class _LogInWidgetState extends State<LogInWidget> {
         ],
       ),
     );
-  }
-
-  bool isFormValid() {
-    if (emailAddress.isNotEmpty && password.isNotEmpty) {
-      return true;
-    }
-    return false;
   }
 
   void tryLogIn() {}

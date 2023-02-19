@@ -1,12 +1,12 @@
 import 'package:blood_donation_recommendation/constants/routes.dart';
 import 'package:blood_donation_recommendation/constants/sizes.dart';
+import 'package:blood_donation_recommendation/controllers/user_controller.dart';
 import 'package:blood_donation_recommendation/views/user_agreement_page.dart';
 import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_donation_recommendation/widgets/common/textfield_widget.dart';
 import 'package:blood_donation_recommendation/widgets/common/button_widget.dart';
-import 'package:blood_donation_recommendation/constants/icons.dart';
 import 'package:blood_donation_recommendation/constants/colors.dart';
 
 class RegisterWidget extends StatefulWidget {
@@ -74,8 +74,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           TextFieldWidget(
             "Enter your full name",
             dataController: _nameController,
-            isDataValid: isFullNameValid(),
-            errorMessage: "Invalid Name",
+            isDataValid: UserVerification.isFullNameValid(fullName),
+            errorMessage: "Invalid Name: Must be at least 3 characters in length",
           ),
           const SizedBox(
             height: 15,
@@ -83,7 +83,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           TextFieldWidget(
             "Enter your email address",
             dataController: _emailController,
-            isDataValid: isEmailAddressValid(),
+            isDataValid: UserVerification.isEmailAddressValid(emailAddress),
             errorMessage: "Invalid Email Address",
           ),
           const SizedBox(
@@ -92,9 +92,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           TextFieldWidget(
             "Enter your password",
             dataController: _firstPasswordController,
-            isDataValid: isFirstPasswordValid(),
+            isDataValid: UserVerification.isFirstPasswordValid(firstPassword),
             errorMessage:
-                "Password must be at least 8 characters and contain at least one capital letters, small letters, numbers, and special characters",
+                "Password must be at least 8 characters in length and contain at least one uppercase letter, lowercase letter, digit, and special character (!, %, @, #, \\, \$, &, *, or ~)",
             isTextHidden: true,
           ),
           const SizedBox(
@@ -103,10 +103,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           TextFieldWidget(
             "Confirm your password",
             dataController: _secondPasswordController,
-            isDataValid: isSecondPasswordValid(),
+            isDataValid: UserVerification.isSecondPasswordValid(firstPassword, secondPassword),
             errorMessage: "Password Mismatch",
             isTextHidden: true,
-            fieldIcon: getSecondPasswordIcon(),
+            fieldIcon: UserVerification.getSecondPasswordIcon(firstPassword, secondPassword),
           ),
           const SizedBox(
             height: 15,
@@ -160,7 +160,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               textSize: mainButtonSize,
               textWeight: FontWeight.bold,
               onPressed: tryRegister,
-              isDisabled: !isFormValid(),
+              isDisabled: !UserVerification.isRegisterFormValid(fullName, emailAddress, firstPassword, secondPassword, userAgreementChecked),
             ),
           ),
           const SizedBox(
@@ -185,70 +185,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         ],
       ),
     );
-  }
-
-  bool isFullNameValid({bool skipEmpty = true}) {
-    if (fullName.length >= 3 || (skipEmpty && fullName.isEmpty)) {
-      return true;
-    }
-    return false;
-  }
-
-  bool isEmailAddressValid({bool skipEmpty = true}) {
-    RegExp emailRegularExpression = RegExp(
-        r'^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)*@[^-][a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,4})$');
-
-    if (emailRegularExpression.hasMatch(emailAddress) ||
-        (skipEmpty && emailAddress.isEmpty)) {
-      return true;
-    }
-    return false;
-  }
-
-  bool isFirstPasswordValid({bool skipEmpty = true}) {
-    RegExp passwordRegularExpression =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-
-    if (passwordRegularExpression.hasMatch(firstPassword) ||
-        (skipEmpty && firstPassword.isEmpty)) {
-      return true;
-    }
-    return false;
-  }
-
-  bool isSecondPasswordValid({bool skipEmpty = true}) {
-    if (firstPassword == secondPassword ||
-        (skipEmpty && secondPassword.isEmpty)) {
-      return true;
-    }
-    return false;
-  }
-
-  Icon? getSecondPasswordIcon() {
-    if (secondPassword.isEmpty) {
-      return null;
-    } else if (isSecondPasswordValid(skipEmpty: false)) {
-      return checkIcon;
-    }
-    return crossIcon;
-  }
-
-  bool isUserAgreementChecked() {
-    if (userAgreementChecked) {
-      return true;
-    }
-    return false;
-  }
-
-  bool isFormValid() {
-    if (isFullNameValid(skipEmpty: false) &&
-        isEmailAddressValid(skipEmpty: false) &&
-        isFirstPasswordValid(skipEmpty: false) &&
-        isSecondPasswordValid(skipEmpty: false) &&
-        isUserAgreementChecked()) {
-      return true;
-    }
-    return false;
   }
 
   void tryRegister() {}
