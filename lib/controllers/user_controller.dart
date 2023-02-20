@@ -1,9 +1,11 @@
 import 'package:blood_donation_recommendation/constants/routes.dart';
 import 'package:blood_donation_recommendation/utilities/error_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_donation_recommendation/constants/icons.dart';
 import 'package:blood_donation_recommendation/constants/messages.dart';
+import 'package:blood_donation_recommendation/models/users.dart';
 
 class UserVerification {
   static bool isFullNameValid(String fullName, {bool skipEmpty = true}) {
@@ -94,11 +96,13 @@ class UserDecoration {
   }
 }
 
-void tryRegisterUser(BuildContext context, String fullName, String emailAddress, String password) async {
+void tryRegisterUser(BuildContext context, String fullName, String emailAddress,
+    String password) async {
   try {
     NavigatorState state = Navigator.of(context);
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress, password: password);
+    createUser(fullName, emailAddress);
     state.pushNamed(searchRoute);
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
@@ -174,4 +178,15 @@ void tryLogOut(BuildContext context) async {
       e.toString(),
     );
   }
+}
+
+Future createUser(String fullName, String emailAddress) async {
+  final userDocument = FirebaseFirestore.instance.collection("Users").doc();
+  final userData = UserRecord(
+    userDocument.id,
+    fullName,
+    emailAddress,
+    FieldValue.serverTimestamp(),
+  ).toJson();
+  await userDocument.set(userData);
 }
