@@ -102,8 +102,13 @@ void tryRegisterUser(BuildContext context, String fullName, String emailAddress,
     NavigatorState state = Navigator.of(context);
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress, password: password);
-    createUser(fullName, emailAddress);
-    state.pushNamed(searchRoute);
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      createUser(state, user.uid, fullName, emailAddress);
+      state.pushNamed(searchRoute);
+    } else {
+      throw const FormatException();
+    }
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
       await showErrorDialog(
@@ -115,12 +120,22 @@ void tryRegisterUser(BuildContext context, String fullName, String emailAddress,
         context,
         'Email is already in use',
       );
+    } else if (e.code == 'invalid-email') {
+      await showErrorDialog(
+        context,
+        'Invalid email',
+      );
     } else {
       await showErrorDialog(
         context,
         'Error: ${e.code}',
       );
     }
+  } on FormatException {
+    await showErrorDialog(
+      context,
+      'Error: Cannot register your account',
+    );
   } catch (e) {
     await showErrorDialog(
       context,
@@ -141,6 +156,8 @@ void tryLogIn(
         searchRoute,
         (route) => false,
       );
+    } else {
+      throw const FormatException();
     }
   } on FirebaseAuthException catch (e) {
     if (e.code == 'user-not-found') {
@@ -159,6 +176,11 @@ void tryLogIn(
         'Error: ${e.code}',
       );
     }
+  } on FormatException {
+    await showErrorDialog(
+      context,
+      'Error: Cannot log in to your account',
+    );
   } catch (e) {
     await showErrorDialog(
       context,
@@ -180,13 +202,21 @@ void tryLogOut(BuildContext context) async {
   }
 }
 
-Future createUser(String fullName, String emailAddress) async {
-  final userDocument = FirebaseFirestore.instance.collection("Users").doc();
-  final userData = UserRecord(
-    userDocument.id,
-    fullName,
-    emailAddress,
-    FieldValue.serverTimestamp(),
-  ).toJson();
-  await userDocument.set(userData);
+void createUser(
+    NavigatorState state, String userId, String fullName, String emailAddress) async {
+  try {
+    final userDocument = FirebaseFirestore.instance.collection("Users").doc();
+    final userData = UserRecord(
+      userId,
+      fullName,
+      emailAddress,
+      FieldValue.serverTimestamp(),
+    ).toJson();
+    await userDocument.set(userData);
+  } catch (e) {
+    await showErrorDialog(
+      state.context,
+      e.toString(),
+    );
+  }
 }

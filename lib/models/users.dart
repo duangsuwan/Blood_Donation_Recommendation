@@ -1,16 +1,15 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserRecord {
-  String id;
+  String userId;
   String fullName;
   String emailAddress;
   FieldValue currentDate;
 
-  UserRecord(this.id, this.fullName, this.emailAddress, this.currentDate);
+  UserRecord(this.userId, this.fullName, this.emailAddress, this.currentDate);
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
+    'user id' : userId,
     'full name' : fullName,
     'email address' : emailAddress,
     'created date' : currentDate,
