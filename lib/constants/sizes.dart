@@ -5,6 +5,7 @@ const double logoBoxHeight = 80;
 const double titleBoxSize = 250;
 const double titleTextSize = 36;
 const double mainButtonSize = 18;
+const double dialogButtonSize = 16;
 const double sizeBetweenLogoTitle = 30;
 const double constructionMessageSize = 20;
 

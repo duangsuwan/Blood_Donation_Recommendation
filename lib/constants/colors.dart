@@ -13,5 +13,6 @@ const Color crossIconColor = Color.fromARGB(255, 183, 28, 28);
 const Color conditionsMessageColor = Colors.black87;
 const Color conditionsLinkColor = Colors.blue;
 const Color errorMessageColor = Color.fromARGB(255, 178, 34, 34);
+const Color dialogMessageColor = Colors.black;
 
 
