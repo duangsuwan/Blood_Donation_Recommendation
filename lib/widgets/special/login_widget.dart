@@ -106,8 +106,12 @@ class _LogInWidgetState extends State<LogInWidget> {
               "Sign In",
               textSize: mainButtonSize,
               textWeight: FontWeight.bold,
-              onPressed: tryLogIn,
-              isDisabled: !UserVerification.isLogInFormValid(_emailAddress, _password),
+              onPressed: () {
+                tryLogIn(context, _emailController.text.trim(),
+                    _passwordController.text.trim());
+              },
+              isDisabled:
+                  !UserVerification.isLogInFormValid(_emailAddress, _password),
             ),
           ),
           const SizedBox(
@@ -119,7 +123,10 @@ class _LogInWidgetState extends State<LogInWidget> {
               const Text("Don't have an account? "),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, registerRoute);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    registerRoute,
+                    (route) => false,
+                  );
                 },
                 child: const TextStyleWidget(
                   "Sign Up",
@@ -133,6 +140,4 @@ class _LogInWidgetState extends State<LogInWidget> {
       ),
     );
   }
-
-  void tryLogIn() {}
 }

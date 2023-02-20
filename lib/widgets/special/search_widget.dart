@@ -1,4 +1,5 @@
 import 'package:blood_donation_recommendation/constants/sizes.dart';
+import 'package:blood_donation_recommendation/controllers/user_controller.dart';
 import 'package:blood_donation_recommendation/widgets/common/button_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -26,15 +27,13 @@ class _SearchEventWidgetState extends State<SearchEventWidget> {
               textSize: mainButtonSize,
               textWeight: FontWeight.bold,
               isDisabled: false,
-              onPressed: tryLogOut,
+              onPressed: () {
+                tryLogOut(context);
+              },
             ),
           ),
         ],
       ),
     );
-  }
-
-  void tryLogOut() {
-    Navigator.pop(context);
   }
 }

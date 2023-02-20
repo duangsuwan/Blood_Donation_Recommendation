@@ -1,5 +1,5 @@
 import 'package:blood_donation_recommendation/constants/colors.dart';
-import 'package:blood_donation_recommendation/utility/responsive_utils.dart';
+import 'package:blood_donation_recommendation/utilities/responsive_utils.dart';
 import 'package:blood_donation_recommendation/widgets/common/responsive_widget.dart';
 import 'package:flutter/material.dart';
 

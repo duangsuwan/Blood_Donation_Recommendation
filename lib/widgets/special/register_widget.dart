@@ -22,7 +22,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   late final TextEditingController _emailController;
   late final TextEditingController _primaryPasswordController;
   late final TextEditingController _secondaryPasswordController;
-  
+
   String _fullName = "";
   String _emailAddress = "";
   String _primaryPassword = "";
@@ -96,7 +96,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           TextFieldWidget(
             "Enter your password",
             dataController: _primaryPasswordController,
-            isDataValid: UserVerification.isPrimaryPasswordValid(_primaryPassword),
+            isDataValid:
+                UserVerification.isPrimaryPasswordValid(_primaryPassword),
             errorMessage: errorMessagePrimaryPassword,
             isTextHidden: _isPasswordHidden,
             fieldIcon: IconButton(
@@ -114,10 +115,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           TextFieldWidget(
             "Confirm your password",
             dataController: _secondaryPasswordController,
-            isDataValid: UserVerification.isSecondaryPasswordValid(_primaryPassword, _secondaryPassword),
+            isDataValid: UserVerification.isSecondaryPasswordValid(
+                _primaryPassword, _secondaryPassword),
             errorMessage: errorMessageSecondaryPassword,
             isTextHidden: true,
-            fieldIcon: UserDecoration.getSecondaryPasswordIcon(_primaryPassword, _secondaryPassword),
+            fieldIcon: UserDecoration.getSecondaryPasswordIcon(
+                _primaryPassword, _secondaryPassword),
           ),
           const SizedBox(
             height: 15,
@@ -170,8 +173,19 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               "Register",
               textSize: mainButtonSize,
               textWeight: FontWeight.bold,
-              onPressed: tryRegister,
-              isDisabled: !UserVerification.isRegisterFormValid(_fullName, _emailAddress, _primaryPassword, _secondaryPassword, _userAgreementChecked),
+              onPressed: () {
+                tryRegisterUser(
+                    context,
+                    _nameController.text.trim(),
+                    _emailController.text.trim(),
+                    _primaryPasswordController.text.trim());
+              },
+              isDisabled: !UserVerification.isRegisterFormValid(
+                  _fullName,
+                  _emailAddress,
+                  _primaryPassword,
+                  _secondaryPassword,
+                  _userAgreementChecked),
             ),
           ),
           const SizedBox(
@@ -183,7 +197,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               const Text("Already have an account? "),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, loginRoute);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    loginRoute,
+                    (route) => false,
+                  );
                 },
                 child: const TextStyleWidget(
                   "Sign In",
@@ -197,6 +214,4 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       ),
     );
   }
-
-  void tryRegister() {}
 }
