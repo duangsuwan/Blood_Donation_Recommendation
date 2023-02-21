@@ -102,7 +102,7 @@ void tryRegisterUser(BuildContext context, String fullName, String emailAddress,
     NavigatorState state = Navigator.of(context);
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress, password: password);
-    User? user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       createUser(state, user.uid, fullName, emailAddress);
       state.pushNamed(searchRoute);

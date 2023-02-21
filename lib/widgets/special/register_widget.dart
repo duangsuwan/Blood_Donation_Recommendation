@@ -126,42 +126,46 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             height: 15,
           ),
           SizedBox(
-            child: CheckboxListTile(
-              value: _userAgreementChecked,
-              controlAffinity: ListTileControlAffinity.leading,
-              onChanged: (bool? value) {
-                setState(() {
-                  _userAgreementChecked = value!;
-                });
-              },
-              title: RichText(
-                text: TextSpan(
-                  children: [
-                    const TextSpan(
-                      text: "You agree to the ",
-                      style: TextStyle(
-                        color: conditionsMessageColor,
-                      ),
-                    ),
-                    TextSpan(
-                      text: "terms and conditions",
-                      style: const TextStyle(
-                        color: conditionsLinkColor,
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const UserAgreementPage(),
-                            ),
-                          );
-                        },
-                    ),
-                  ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Checkbox(
+                  value: _userAgreementChecked,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _userAgreementChecked = value!;
+                    });
+                  },
                 ),
-              ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: "You agree to the ",
+                        style: TextStyle(
+                          color: conditionsMessageColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text: "terms and conditions",
+                        style: const TextStyle(
+                          color: conditionsLinkColor,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const UserAgreementPage(),
+                              ),
+                            );
+                          },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(
