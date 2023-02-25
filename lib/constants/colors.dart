@@ -10,6 +10,7 @@ const Color textHintColor = Colors.grey;
 const Color fieldBorderColor = Color.fromARGB(255, 255, 149, 24);
 const Color checkIconColor = Color.fromARGB(255, 56, 142, 60);
 const Color crossIconColor = Color.fromARGB(255, 183, 28, 28);
+const Color dateTimeColor = Color.fromARGB(255, 216, 97, 12);
 const Color conditionsMessageColor = Colors.black87;
 const Color conditionsLinkColor = Colors.blue;
 const Color errorMessageColor = Color.fromARGB(255, 178, 34, 34);

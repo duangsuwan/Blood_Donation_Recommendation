@@ -1,6 +1,8 @@
 import 'package:blood_donation_recommendation/constants/sizes.dart';
 import 'package:blood_donation_recommendation/controllers/user_controller.dart';
 import 'package:blood_donation_recommendation/widgets/common/button_widget.dart';
+import 'package:blood_donation_recommendation/widgets/special/picker_date_widget.dart';
+import 'package:blood_donation_recommendation/widgets/special/picker_time_widget.dart';
 import 'package:flutter/material.dart';
 
 class SearchEventWidget extends StatefulWidget {
@@ -17,6 +19,16 @@ class _SearchEventWidgetState extends State<SearchEventWidget> {
       padding: secondWidgetGroupPadding,
       child: Column(
         children: [
+          const SizedBox(
+            height: 20,
+          ),
+          const DatePickerWidget(
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          const TimePickerWidget(
+          ),
           const SizedBox(
             height: 50,
           ),
