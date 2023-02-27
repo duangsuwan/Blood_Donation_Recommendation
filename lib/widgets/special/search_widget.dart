@@ -1,5 +1,4 @@
 import 'package:blood_donation_recommendation/constants/sizes.dart';
-import 'package:blood_donation_recommendation/controllers/user_controller.dart';
 import 'package:blood_donation_recommendation/widgets/common/button_widget.dart';
 import 'package:blood_donation_recommendation/widgets/special/picker_date_widget.dart';
 import 'package:blood_donation_recommendation/widgets/special/picker_time_widget.dart';
@@ -35,12 +34,11 @@ class _SearchEventWidgetState extends State<SearchEventWidget> {
           SizedBox(
             width: double.infinity,
             child: ButtonWidget(
-              "Log Out",
+              "Let's Go",
               textSize: mainButtonSize,
               textWeight: FontWeight.bold,
               isDisabled: false,
               onPressed: () {
-                tryLogOut(context);
               },
             ),
           ),

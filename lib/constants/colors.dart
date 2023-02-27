@@ -7,6 +7,7 @@ const Color buttonDisableColor = Colors.black12;
 const Color titleColor = Color.fromARGB(255, 235, 131, 8);
 const Color textCustomColor = Colors.white;
 const Color textHintColor = Colors.grey;
+const Color textMenuColor = Colors.deepOrange;
 const Color fieldBorderColor = Color.fromARGB(255, 255, 149, 24);
 const Color checkIconColor = Color.fromARGB(255, 56, 142, 60);
 const Color crossIconColor = Color.fromARGB(255, 183, 28, 28);
@@ -15,5 +16,6 @@ const Color conditionsMessageColor = Colors.black87;
 const Color conditionsLinkColor = Colors.blue;
 const Color errorMessageColor = Color.fromARGB(255, 178, 34, 34);
 const Color dialogMessageColor = Colors.black;
+const Color dividerLineColor = Colors.black54;
 
 

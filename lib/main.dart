@@ -1,7 +1,9 @@
 import 'package:blood_donation_recommendation/constants/routes.dart';
 import 'package:blood_donation_recommendation/views/login_page.dart';
+import 'package:blood_donation_recommendation/views/profile_page.dart';
 import 'package:blood_donation_recommendation/views/search_page.dart';
 import 'package:blood_donation_recommendation/views/register_page.dart';
+import 'package:blood_donation_recommendation/views/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:device_preview/device_preview.dart';
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
         loginRoute: (context) => const LogInPage(),
         registerRoute: (context) => const RegisterPage(),
         searchRoute: (context) => const SearchPage(),
+        profileRoute: (context) => const ProfilePage(),
+        settingsRoute: (context) => const SettingsPage(),
       }
     );
   }

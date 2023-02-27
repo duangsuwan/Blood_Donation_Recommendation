@@ -4,12 +4,14 @@ class ImageWidget extends StatelessWidget {
   final double imageWidth;
   final double imageHeight;
   final String imageName;
+  final BoxShape imageShape;
 
   const ImageWidget(
     this.imageWidth, 
     this.imageHeight, 
     this.imageName, 
-    {super.key}
+    {this.imageShape = BoxShape.rectangle,
+    super.key}
   );
 
   @override
@@ -18,6 +20,7 @@ class ImageWidget extends StatelessWidget {
       width: imageWidth,
       height: imageHeight,
       decoration: BoxDecoration(
+        shape: imageShape,
         image: DecorationImage(
           image: AssetImage(
             imageName,

@@ -1,23 +1,22 @@
 import 'package:blood_donation_recommendation/constants/sizes.dart';
 import 'package:blood_donation_recommendation/widgets/common/image_widget.dart';
 import 'package:blood_donation_recommendation/widgets/common/page_widget.dart';
-import 'package:blood_donation_recommendation/widgets/special/search_widget.dart';
+import 'package:blood_donation_recommendation/widgets/special/blank_widget.dart';
 import 'package:blood_donation_recommendation/widgets/special/title_widget.dart';
 import 'package:blood_donation_recommendation/constants/images.dart';
 import 'package:flutter/material.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return PageWidget(
-      isMenuVisible: true,
       Column(
         children: const [
           ImageWidget(
@@ -29,13 +28,13 @@ class _SearchPageState extends State<SearchPage> {
             height: sizeBetweenLogoTitle,
           ),
           TitleWidget(
-            "DONATION",
-            "TIME",
+            "MY",
+            "SETTINGS",
             titleBoxSize,
           ),
         ],
       ),
-      const SearchEventWidget(),
+      const UnderConstructionWidget(),
     );
   }
 }

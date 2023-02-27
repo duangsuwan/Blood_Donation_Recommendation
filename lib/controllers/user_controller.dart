@@ -1,6 +1,5 @@
 import 'package:blood_donation_recommendation/constants/routes.dart';
 import 'package:blood_donation_recommendation/utilities/error_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_donation_recommendation/constants/icons.dart';
@@ -104,7 +103,7 @@ void tryRegisterUser(BuildContext context, String fullName, String emailAddress,
         email: emailAddress, password: password);
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      createUser(state, user.uid, fullName, emailAddress);
+      DatabaseAccess.createUser(state, user.uid, fullName, emailAddress);
       state.pushNamed(searchRoute);
     } else {
       throw const FormatException();
@@ -197,25 +196,6 @@ void tryLogOut(BuildContext context) async {
   } catch (e) {
     await showErrorDialog(
       context,
-      e.toString(),
-    );
-  }
-}
-
-void createUser(
-    NavigatorState state, String userId, String fullName, String emailAddress) async {
-  try {
-    final userDocument = FirebaseFirestore.instance.collection("Users").doc();
-    final userData = UserRecord(
-      userId,
-      fullName,
-      emailAddress,
-      FieldValue.serverTimestamp(),
-    ).toJson();
-    await userDocument.set(userData);
-  } catch (e) {
-    await showErrorDialog(
-      state.context,
       e.toString(),
     );
   }
