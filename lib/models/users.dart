@@ -7,7 +7,7 @@ class UserRecord {
   String userId;
   String fullName;
   String emailAddress;
-  FieldValue? currentDate;
+  Timestamp? currentDate;
 
   UserRecord(this.userId, this.fullName, this.emailAddress, {this.currentDate});
 
@@ -22,7 +22,7 @@ class UserRecord {
     final json = snapshot.data();
     if (json != null) {
       return UserRecord(json['user id'], json['full name'],
-          json['email address']);
+          json['email address'], currentDate: json['created date']);
     }
     return null;
   }
@@ -37,7 +37,7 @@ class DatabaseAccess {
         userId,
         fullName,
         emailAddress,
-        currentDate: FieldValue.serverTimestamp(),
+        currentDate: Timestamp.fromDate(DateTime.now()),
       ).toJson();
       await userDocument.set(userData);
     } catch (e) {
