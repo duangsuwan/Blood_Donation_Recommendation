@@ -30,7 +30,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                 bottom: 25,
               ),
               child: FutureBuilder<UserRecord>(
-                future: DatabaseAccess.readUser(context),
+                future: UserDatabaseAccess.readUser(context),
                 builder:
                     (BuildContext context, AsyncSnapshot<UserRecord> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {

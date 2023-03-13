@@ -1,3 +1,4 @@
+import 'package:blood_donation_recommendation/constants/routes.dart';
 import 'package:blood_donation_recommendation/constants/sizes.dart';
 import 'package:blood_donation_recommendation/widgets/common/button_widget.dart';
 import 'package:blood_donation_recommendation/widgets/special/picker_date_widget.dart';
@@ -39,6 +40,7 @@ class _SearchEventWidgetState extends State<SearchEventWidget> {
               textWeight: FontWeight.bold,
               isDisabled: false,
               onPressed: () {
+                 Navigator.of(context).pushNamed(resultRoute);
               },
             ),
           ),

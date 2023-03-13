@@ -11,24 +11,26 @@ class UserRecord {
 
   UserRecord(this.userId, this.fullName, this.emailAddress, {this.currentDate});
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toUserJson() => {
         'user id': userId,
         'full name': fullName,
         'email address': emailAddress,
         'created date': currentDate,
       };
 
-  static UserRecord? fromJson(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  static UserRecord? fromUserJson(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final json = snapshot.data();
     if (json != null) {
-      return UserRecord(json['user id'], json['full name'],
-          json['email address'], currentDate: json['created date']);
+      return UserRecord(
+          json['user id'], json['full name'], json['email address'],
+          currentDate: json['created date']);
     }
     return null;
   }
 }
 
-class DatabaseAccess {
+class UserDatabaseAccess {
   static void createUser(NavigatorState state, String userId, String fullName,
       String emailAddress) async {
     try {
@@ -38,7 +40,7 @@ class DatabaseAccess {
         fullName,
         emailAddress,
         currentDate: Timestamp.fromDate(DateTime.now()),
-      ).toJson();
+      ).toUserJson();
       await userDocument.set(userData);
     } catch (e) {
       await showErrorDialog(
@@ -58,21 +60,21 @@ class DatabaseAccess {
             .get();
         if (userDocument.docs.isNotEmpty) {
           final userRecord = userDocument.docs
-              .map((docSnapshot) => UserRecord.fromJson(docSnapshot))
-              .toList().first;
+              .map((docSnapshot) => UserRecord.fromUserJson(docSnapshot))
+              .toList()
+              .first;
           if (userRecord != null) {
             return userRecord;
           }
         }
-      }
-      else {
+      } else {
         throw const FormatException();
       }
     } on FormatException {
       await showErrorDialog(
         context,
         'Error: Cannot retrieve current user id',
-      ); 
+      );
     } catch (e) {
       await showErrorDialog(
         context,

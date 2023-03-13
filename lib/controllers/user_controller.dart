@@ -103,7 +103,7 @@ void tryRegisterUser(BuildContext context, String fullName, String emailAddress,
         email: emailAddress, password: password);
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      DatabaseAccess.createUser(state, user.uid, fullName, emailAddress);
+      UserDatabaseAccess.createUser(state, user.uid, fullName, emailAddress);
       state.pushNamed(searchRoute);
     } else {
       throw const FormatException();

@@ -1,6 +1,7 @@
 import 'package:blood_donation_recommendation/constants/routes.dart';
 import 'package:blood_donation_recommendation/views/login_page.dart';
 import 'package:blood_donation_recommendation/views/profile_page.dart';
+import 'package:blood_donation_recommendation/views/result_page.dart';
 import 'package:blood_donation_recommendation/views/search_page.dart';
 import 'package:blood_donation_recommendation/views/register_page.dart';
 import 'package:blood_donation_recommendation/views/settings_page.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         searchRoute: (context) => const SearchPage(),
         profileRoute: (context) => const ProfilePage(),
         settingsRoute: (context) => const SettingsPage(),
+        resultRoute: (context) => const ResultPage(),
       }
     );
   }

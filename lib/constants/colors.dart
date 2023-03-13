@@ -17,5 +17,6 @@ const Color conditionsLinkColor = Colors.blue;
 const Color errorMessageColor = Color.fromARGB(255, 178, 34, 34);
 const Color dialogMessageColor = Colors.black;
 const Color dividerLineColor = Colors.black54;
+const Color eventDetailCard = Colors.white;
 
 
