@@ -1,13 +1,18 @@
 import 'package:blood_donation_recommendation/constants/colors.dart';
 import 'package:blood_donation_recommendation/constants/icons.dart';
 import 'package:blood_donation_recommendation/constants/sizes.dart';
+import 'package:blood_donation_recommendation/controllers/datetime_controller.dart';
 import 'package:blood_donation_recommendation/widgets/common/picker_widget.dart';
 import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class DatePickerWidget extends StatefulWidget {
-  const DatePickerWidget({super.key});
+  final String titleValue;
+  final double textSize;
+  final double pickerSize;
+
+  const DatePickerWidget(this.titleValue, this.textSize, this.pickerSize,
+      {super.key});
 
   @override
   State<DatePickerWidget> createState() => _DatePickerWidgetState();
@@ -20,11 +25,11 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Align(
-            alignment: Alignment.centerLeft,
+          SizedBox(
             child: TextStyleWidget(
-              "Date",
+              widget.titleValue,
               conditionsMessageColor,
               textSize: dateTimeLabelSize,
               textWeight: FontWeight.bold,
@@ -34,7 +39,9 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             height: 10,
           ),
           PickerWidget(
-            getDate(),
+            DateTimeConverter.getDate(selectedDate),
+            widget.textSize,
+            widget.pickerSize,
             calendarIcon,
             onPressed: () {
               selectDate();
@@ -60,9 +67,5 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     setState(() {
       selectedDate = newDate;
     });
-  }
-
-  String getDate() {
-    return DateFormat.yMMMMd().format(selectedDate);
   }
 }

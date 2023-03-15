@@ -1,4 +1,5 @@
 import 'package:blood_donation_recommendation/constants/routes.dart';
+import 'package:blood_donation_recommendation/views/home_page.dart';
 import 'package:blood_donation_recommendation/views/login_page.dart';
 import 'package:blood_donation_recommendation/views/profile_page.dart';
 import 'package:blood_donation_recommendation/views/result_page.dart';
@@ -6,12 +7,10 @@ import 'package:blood_donation_recommendation/views/search_page.dart';
 import 'package:blood_donation_recommendation/views/register_page.dart';
 import 'package:blood_donation_recommendation/views/settings_page.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:device_preview/device_preview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp(
     DevicePreview(
       enabled: true,
@@ -29,6 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      initialRoute: loginRoute,
+      home: const HomePage(),
       routes: {
         loginRoute: (context) => const LogInPage(),
         registerRoute: (context) => const RegisterPage(),

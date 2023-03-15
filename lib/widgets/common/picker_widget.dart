@@ -4,29 +4,34 @@ import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.da
 
 class PickerWidget extends StatelessWidget {
   final String textValue;
+  final double textSize;
+  final double widgetSize;
   final Widget suffixIcon;
   final VoidCallback onPressed;
 
-  const PickerWidget(this.textValue, this.suffixIcon, {required this.onPressed, super.key});
+  const PickerWidget(this.textValue, this.textSize, this.widgetSize, this.suffixIcon,
+      {required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(
-          color: textCustomColor,
-          width: 1.5,
+    return SizedBox(
+      width: widgetSize,
+      child: ListTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(
+            color: textCustomColor,
+          ),
         ),
+        tileColor: textCustomColor,
+        title: TextStyleWidget(
+          textValue,
+          dateTimeColor,
+          textSize: textSize,
+        ),
+        trailing: suffixIcon,
+        onTap: onPressed,
       ),
-      tileColor: textCustomColor,
-      title: TextStyleWidget(
-        textValue,
-        dateTimeColor,
-        textSize: 18,
-      ),
-      trailing: suffixIcon,
-      onTap: onPressed,
     );
   }
 }

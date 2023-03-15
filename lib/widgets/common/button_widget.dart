@@ -16,7 +16,7 @@ class ButtonWidget extends StatelessWidget {
     return TextButton(
       onPressed: isDisabled ? null : onPressed,
       style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 15),
           backgroundColor: isDisabled ? buttonDisableColor : buttonEnableColor),
       child: Text(
         textValue,

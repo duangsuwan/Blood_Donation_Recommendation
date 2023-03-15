@@ -25,7 +25,7 @@ class _ResultPageState extends State<ResultPage> {
             logoImage,
           ),
           SizedBox(
-            height: 50,
+            height: 5,
           ),
         ],
       ),

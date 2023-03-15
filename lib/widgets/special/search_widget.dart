@@ -23,11 +23,17 @@ class _SearchEventWidgetState extends State<SearchEventWidget> {
             height: 20,
           ),
           const DatePickerWidget(
+            "Date",
+            18,
+            double.infinity,
           ),
           const SizedBox(
             height: 15,
           ),
           const TimePickerWidget(
+            "Time",
+            18,
+            double.infinity,
           ),
           const SizedBox(
             height: 50,
@@ -40,7 +46,7 @@ class _SearchEventWidgetState extends State<SearchEventWidget> {
               textWeight: FontWeight.bold,
               isDisabled: false,
               onPressed: () {
-                 Navigator.of(context).pushNamed(resultRoute);
+                Navigator.of(context).pushNamed(resultRoute);
               },
             ),
           ),
