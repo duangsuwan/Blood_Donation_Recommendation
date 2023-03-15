@@ -12,6 +12,7 @@ const double sizeBetweenLogoTitle = 30;
 const double constructionMessageSize = 20;
 const double eventCardWidth = 600;
 const double eventCardHeight = 170;
+const double eventListHeight = 340;
 
 const double widthMobile = 600;
 const double widthTablet = 900;

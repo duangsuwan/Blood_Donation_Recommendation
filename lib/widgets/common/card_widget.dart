@@ -1,5 +1,6 @@
 import 'package:blood_donation_recommendation/constants/colors.dart';
 import 'package:blood_donation_recommendation/constants/sizes.dart';
+import 'package:blood_donation_recommendation/controllers/datetime_controller.dart';
 import 'package:blood_donation_recommendation/models/events.dart';
 import 'package:blood_donation_recommendation/models/locations.dart';
 import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.dart';
@@ -11,6 +12,9 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String startDateTime = DateTimeConverter.getDateTime(eventRecord.startDateTime);
+    String finishDateTime = DateTimeConverter.getDateTime(eventRecord.finishDateTime);
+    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Container(
@@ -89,12 +93,12 @@ class CardWidget extends StatelessWidget {
                       textWeight: FontWeight.bold,
                     ),
                     TextStyleWidget(
-                      " ${eventRecord.startDateTime.toString()} - ",
+                      " From $startDateTime",
                       conditionsMessageColor,
                       textSize: 10,
                     ),
                     TextStyleWidget(
-                      " ${eventRecord.finishDateTime.toString()}",
+                      " To $finishDateTime",
                       conditionsMessageColor,
                       textSize: 10,
                     ),

@@ -17,6 +17,8 @@ class ResultEventWidget extends StatefulWidget {
 }
 
 class _ResultEventWidgetState extends State<ResultEventWidget> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -70,39 +72,45 @@ class _ResultEventWidgetState extends State<ResultEventWidget> {
                       TextStyleWidget(
                         " ${snapshot.data!.length} Blood Donation Event(s)",
                         dateTimeColor,
-                        textSize: 18,
+                        textSize: 16,
                         textWeight: FontWeight.bold,
                       ),
                       const SizedBox(
-                        height: 8,
+                        height: 10,
                       ),
                       SizedBox(
                         width: eventCardWidth,
-                        height: eventCardWidth,
-                        child: ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, int index) {
-                            if (snapshot.connectionState ==
-                                    ConnectionState.done &&
-                                snapshot.hasData) {
-                              return FutureBuilder<EventRecord?>(
-                                builder: (context,
-                                    AsyncSnapshot<EventRecord?> snapshot) {
-                                  if (snapshot.connectionState ==
-                                          ConnectionState.done &&
-                                      snapshot.hasData) {
-                                    return Center(
-                                      child: CardWidget(snapshot.data!),
-                                    );
-                                  } else {
-                                    return const CircularProgressIndicator();
-                                  }
-                                },
-                                future: snapshot.data![index],
-                              );
-                            }
-                            return const CircularProgressIndicator();
-                          },
+                        height: eventListHeight,
+                        child: Scrollbar(
+                          thumbVisibility: true,
+                          controller: _scrollController,
+                          scrollbarOrientation: ScrollbarOrientation.right,
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, int index) {
+                              if (snapshot.connectionState ==
+                                      ConnectionState.done &&
+                                  snapshot.hasData) {
+                                return FutureBuilder<EventRecord?>(
+                                  builder: (context,
+                                      AsyncSnapshot<EventRecord?> snapshot) {
+                                    if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        snapshot.hasData) {
+                                      return Center(
+                                        child: CardWidget(snapshot.data!),
+                                      );
+                                    } else {
+                                      return const CircularProgressIndicator();
+                                    }
+                                  },
+                                  future: snapshot.data![index],
+                                );
+                              }
+                              return const CircularProgressIndicator();
+                            },
+                          ),
                         ),
                       ),
                     ],
