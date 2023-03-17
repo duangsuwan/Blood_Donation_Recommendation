@@ -16,6 +16,10 @@ class TimePickerWidget extends StatefulWidget {
 
   @override
   State<TimePickerWidget> createState() => _TimePickerWidgetState();
+
+  TimeOfDay getSelectedTime() {
+    return _TimePickerWidgetState().selectedTime;
+  }
 }
 
 class _TimePickerWidgetState extends State<TimePickerWidget> {

@@ -16,6 +16,10 @@ class DatePickerWidget extends StatefulWidget {
 
   @override
   State<DatePickerWidget> createState() => _DatePickerWidgetState();
+
+  DateTime getDateFromPicker() {
+    return _DatePickerWidgetState().selectedDate;
+  }
 }
 
 class _DatePickerWidgetState extends State<DatePickerWidget> {

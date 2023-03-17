@@ -1,3 +1,4 @@
+import 'package:blood_donation_recommendation/controllers/datetime_controller.dart';
 import 'package:blood_donation_recommendation/models/locations.dart';
 import 'package:blood_donation_recommendation/utilities/error_dialog.dart';
 import 'package:flutter/material.dart';
@@ -28,24 +29,23 @@ class EventRecord {
 
 class EventDatabaseAccess {
   static Future<List<Future<EventRecord?>>?> readAvailableEvents(
-      BuildContext context) async {
+      BuildContext context,
+      DateTime selectedDate,
+      TimeOfDay selectedTime) async {
     try {
-      final eventDocument =
-          await FirebaseFirestore.instance.collection('Events').get();
+      final selectedDateTime = DateTimeConverter.combineDateTime(selectedDate, selectedTime);
+      final eventDocument = await FirebaseFirestore.instance
+          .collection('Events')
+          .where("start time", isLessThanOrEqualTo: selectedDateTime)
+          .orderBy("start time")
+          .get();
       if (eventDocument.docs.isNotEmpty) {
         final eventRecord = eventDocument.docs
             .map((docSnapshot) async =>
                 await EventRecord.fromEventJson(context, docSnapshot))
             .toList();
         return eventRecord;
-      } else {
-        throw const FormatException();
       }
-    } on FormatException {
-      await showErrorDialog(
-        context,
-        'Error: Cannot retrieve blood donation event(s)',
-      );
     } catch (e) {
       await showErrorDialog(
         context,

@@ -21,25 +21,21 @@ class _ResultEventWidgetState extends State<ResultEventWidget> {
 
   @override
   Widget build(BuildContext context) {
+    DatePickerWidget datePickerWidget =
+        const DatePickerWidget(" Donation Date", 14, 180);
+    TimePickerWidget timePickerWidget =
+        const TimePickerWidget(" Donation Time", 14, 130);
     return Padding(
       padding: secondWidgetGroupPadding,
       child: Column(
         children: [
           Row(
-            children: const [
-              DatePickerWidget(
-                " Donation Date",
-                14,
-                180,
-              ),
-              SizedBox(
+            children: [
+              datePickerWidget,
+              const SizedBox(
                 width: 20,
               ),
-              TimePickerWidget(
-                " Donation Time",
-                14,
-                130,
-              ),
+              timePickerWidget,
             ],
           ),
           const SizedBox(
@@ -62,61 +58,106 @@ class _ResultEventWidgetState extends State<ResultEventWidget> {
           ),
           SizedBox(
             child: FutureBuilder<List<Future<EventRecord?>>?>(
-              future: EventDatabaseAccess.readAvailableEvents(context),
+              future: EventDatabaseAccess.readAvailableEvents(
+                  context,
+                  datePickerWidget.getDateFromPicker(),
+                  timePickerWidget.getSelectedTime()),
               builder: (context,
                   AsyncSnapshot<List<Future<EventRecord?>>?> snapshot) {
-                if (snapshot.hasData) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextStyleWidget(
-                        " ${snapshot.data!.length} Blood Donation Event(s)",
-                        dateTimeColor,
-                        textSize: 16,
-                        textWeight: FontWeight.bold,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        width: eventCardWidth,
-                        height: eventListHeight,
-                        child: Scrollbar(
-                          thumbVisibility: true,
-                          controller: _scrollController,
-                          scrollbarOrientation: ScrollbarOrientation.right,
-                          child: ListView.builder(
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextStyleWidget(
+                          " ${snapshot.data!.length} Blood Donation Event(s)",
+                          dateTimeColor,
+                          textSize: 16,
+                          textWeight: FontWeight.bold,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: eventCardWidth,
+                          height: eventListHeight,
+                          child: Scrollbar(
+                            thumbVisibility: true,
                             controller: _scrollController,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, int index) {
-                              if (snapshot.connectionState ==
-                                      ConnectionState.done &&
-                                  snapshot.hasData) {
-                                return FutureBuilder<EventRecord?>(
-                                  builder: (context,
-                                      AsyncSnapshot<EventRecord?> snapshot) {
-                                    if (snapshot.connectionState ==
-                                            ConnectionState.done &&
-                                        snapshot.hasData) {
-                                      return Center(
-                                        child: CardWidget(snapshot.data!),
-                                      );
-                                    } else {
-                                      return const CircularProgressIndicator();
-                                    }
-                                  },
-                                  future: snapshot.data![index],
-                                );
-                              }
-                              return const CircularProgressIndicator();
-                            },
+                            scrollbarOrientation: ScrollbarOrientation.right,
+                            child: ListView.builder(
+                              controller: _scrollController,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, int index) {
+                                if (snapshot.connectionState ==
+                                        ConnectionState.done &&
+                                    snapshot.hasData) {
+                                  return FutureBuilder<EventRecord?>(
+                                    builder: (context,
+                                        AsyncSnapshot<EventRecord?> snapshot) {
+                                      if (snapshot.connectionState ==
+                                              ConnectionState.done &&
+                                          snapshot.hasData) {
+                                        return Center(
+                                          child: CardWidget(snapshot.data!),
+                                        );
+                                      } else {
+                                        return const CircularProgressIndicator();
+                                      }
+                                    },
+                                    future: snapshot.data![index],
+                                  );
+                                }
+                                return const CircularProgressIndicator();
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
+                      ],
+                    );
+                  } else {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const TextStyleWidget(
+                          " 0 Blood Donation Event",
+                          dateTimeColor,
+                          textSize: 16,
+                          textWeight: FontWeight.bold,
+                        ),
+                        const SizedBox(
+                          height: 60,
+                        ),
+                        Center(
+                          child: Column(
+                            children: const [
+                              TextStyleWidget(
+                                "There is no blood",
+                                titleColor,
+                                textSize: 22,
+                                textWeight: FontWeight.bold,
+                              ),
+                              TextStyleWidget(
+                                "donation event",
+                                titleColor,
+                                textSize: 22,
+                                textWeight: FontWeight.bold,
+                              ),
+                              TextStyleWidget(
+                                "available for you",
+                                titleColor,
+                                textSize: 22,
+                                textWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                } else {
+                  return const CircularProgressIndicator();
                 }
-                return const CircularProgressIndicator();
               },
             ),
           ),
