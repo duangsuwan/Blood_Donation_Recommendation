@@ -12,9 +12,11 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String startDateTime = DateTimeConverter.getDateTime(eventRecord.startDateTime);
-    String finishDateTime = DateTimeConverter.getDateTime(eventRecord.finishDateTime);
-    
+    String startDateTime =
+        DateTimeConverter.getDateTime(eventRecord.startDateTime);
+    String finishDateTime =
+        DateTimeConverter.getDateTime(eventRecord.finishDateTime);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Container(
@@ -33,98 +35,112 @@ class CardWidget extends StatelessWidget {
         ),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Container(
-                width: 120,
-                alignment: Alignment.centerLeft,
-                child: FutureBuilder<String>(
-                  future: LocationDatabaseAccess.getLocationImageURL(
-                      eventRecord.eventLocation!.locationImageName),
-                  builder: (context, AsyncSnapshot<String> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.hasData) {
-                      return Image.network(
-                        snapshot.data!,
-                        width: 120,
-                        height: 120,
-                      );
-                    } else {
-                      return const CircularProgressIndicator();
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              SizedBox(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: FutureBuilder<LocationRecord?>(
+            future: LocationDatabaseAccess.readEventLocation(
+                context, eventRecord.eventLocation),
+            builder: (context, AsyncSnapshot<LocationRecord?> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.hasData) {
+                return Row(
                   children: [
-                    TextStyleWidget(
-                      eventRecord.eventName,
-                      conditionsMessageColor,
-                      textSize: 16,
-                      textWeight: FontWeight.bold,
+                    Container(
+                      width: 120,
+                      alignment: Alignment.centerLeft,
+                      child: FutureBuilder<String>(
+                        future: LocationDatabaseAccess.getLocationImageURL(
+                            snapshot.data!.locationImageName),
+                        builder: (context, AsyncSnapshot<String> snapShot) {
+                          if (snapShot.connectionState ==
+                                  ConnectionState.done &&
+                              snapShot.hasData) {
+                            return Image.network(
+                              snapShot.data!,
+                              width: 120,
+                              height: 120,
+                            );
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        },
+                      ),
                     ),
                     const SizedBox(
-                      height: 5,
+                      width: 20,
                     ),
-                    TextStyleWidget(
-                      " ${eventRecord.eventLocation!.locationAddress}",
-                      conditionsMessageColor,
-                      textSize: 10,
-                      textWeight: FontWeight.bold,
-                    ),
-                    TextStyleWidget(
-                      " ${eventRecord.eventLocation!.locationCity} ${eventRecord.eventLocation!.locationState} ${eventRecord.eventLocation!.locationZipCode}",
-                      conditionsMessageColor,
-                      textSize: 10,
-                      textWeight: FontWeight.bold,
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    const TextStyleWidget(
-                      " Event Duration",
-                      conditionsMessageColor,
-                      textSize: 10,
-                      textWeight: FontWeight.bold,
-                    ),
-                    TextStyleWidget(
-                      " From $startDateTime",
-                      conditionsMessageColor,
-                      textSize: 10,
-                    ),
-                    TextStyleWidget(
-                      " To $finishDateTime",
-                      conditionsMessageColor,
-                      textSize: 10,
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Row(
-                      children: const [
-                        TextStyleWidget(
-                          " Traffic Level:  ",
-                          conditionsMessageColor,
-                          textSize: 12,
-                          textWeight: FontWeight.bold,
-                        ),
-                        TextStyleWidget(
-                          "N/A",
-                          conditionsMessageColor,
-                          textSize: 12,
-                          textWeight: FontWeight.bold,
-                        ),
-                      ],
+                    SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextStyleWidget(
+                            eventRecord.eventName,
+                            conditionsMessageColor,
+                            textSize: 16,
+                            textWeight: FontWeight.bold,
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          TextStyleWidget(
+                            " ${snapshot.data!.locationAddress}",
+                            conditionsMessageColor,
+                            textSize: 10,
+                            textWeight: FontWeight.bold,
+                          ),
+                          TextStyleWidget(
+                            " ${snapshot.data!.locationCity} ${snapshot.data!.locationState} ${snapshot.data!.locationZipCode}",
+                            conditionsMessageColor,
+                            textSize: 10,
+                            textWeight: FontWeight.bold,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const TextStyleWidget(
+                            " Event Duration",
+                            conditionsMessageColor,
+                            textSize: 10,
+                            textWeight: FontWeight.bold,
+                          ),
+                          TextStyleWidget(
+                            " From $startDateTime",
+                            conditionsMessageColor,
+                            textSize: 10,
+                          ),
+                          TextStyleWidget(
+                            " To $finishDateTime",
+                            conditionsMessageColor,
+                            textSize: 10,
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            children: const [
+                              TextStyleWidget(
+                                " Traffic Level:  ",
+                                conditionsMessageColor,
+                                textSize: 12,
+                                textWeight: FontWeight.bold,
+                              ),
+                              TextStyleWidget(
+                                "N/A",
+                                conditionsMessageColor,
+                                textSize: 12,
+                                textWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
-                ),
-              ),
-            ],
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
         ),
       ),

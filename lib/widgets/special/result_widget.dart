@@ -57,13 +57,12 @@ class _ResultEventWidgetState extends State<ResultEventWidget> {
             height: 30,
           ),
           SizedBox(
-            child: FutureBuilder<List<Future<EventRecord?>>?>(
+            child: FutureBuilder<List<EventRecord?>?>(
               future: EventDatabaseAccess.readAvailableEvents(
                   context,
                   datePickerWidget.getDateFromPicker(),
                   timePickerWidget.getSelectedTime()),
-              builder: (context,
-                  AsyncSnapshot<List<Future<EventRecord?>>?> snapshot) {
+              builder: (context, AsyncSnapshot<List<EventRecord?>?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     return Column(
@@ -92,23 +91,14 @@ class _ResultEventWidgetState extends State<ResultEventWidget> {
                                 if (snapshot.connectionState ==
                                         ConnectionState.done &&
                                     snapshot.hasData) {
-                                  return FutureBuilder<EventRecord?>(
-                                    builder: (context,
-                                        AsyncSnapshot<EventRecord?> snapshot) {
-                                      if (snapshot.connectionState ==
-                                              ConnectionState.done &&
-                                          snapshot.hasData) {
-                                        return Center(
-                                          child: CardWidget(snapshot.data!),
-                                        );
-                                      } else {
-                                        return const CircularProgressIndicator();
-                                      }
-                                    },
-                                    future: snapshot.data![index],
+                                  return Center(
+                                    child: CardWidget(snapshot.data![index]!),
+                                  );
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
                                   );
                                 }
-                                return const CircularProgressIndicator();
                               },
                             ),
                           ),
