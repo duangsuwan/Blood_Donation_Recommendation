@@ -59,7 +59,9 @@ class CardWidget extends StatelessWidget {
                               height: 120,
                             );
                           } else {
-                            return const CircularProgressIndicator();
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
                           }
                         },
                       ),

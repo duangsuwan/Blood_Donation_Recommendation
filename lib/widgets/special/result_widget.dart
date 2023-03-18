@@ -7,6 +7,7 @@ import 'package:blood_donation_recommendation/widgets/common/card_widget.dart';
 import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.dart';
 import 'package:blood_donation_recommendation/widgets/special/picker_date_widget.dart';
 import 'package:blood_donation_recommendation/widgets/special/picker_time_widget.dart';
+import 'package:blood_donation_recommendation/widgets/special/subtitle_widget.dart';
 import 'package:flutter/material.dart';
 
 class ResultEventWidget extends StatefulWidget {
@@ -59,91 +60,59 @@ class _ResultEventWidgetState extends State<ResultEventWidget> {
           SizedBox(
             child: FutureBuilder<List<EventRecord?>?>(
               future: EventDatabaseAccess.readAvailableEvents(
-                  context,
-                  datePickerWidget.getDateFromPicker(),
-                  timePickerWidget.getSelectedTime()),
+                context,
+                datePickerWidget.getDateFromPicker(),
+                timePickerWidget.getTimeFromPicker(),
+              ),
               builder: (context, AsyncSnapshot<List<EventRecord?>?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextStyleWidget(
-                          " ${snapshot.data!.length} Blood Donation Event(s)",
-                          dateTimeColor,
-                          textSize: 16,
-                          textWeight: FontWeight.bold,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: eventCardWidth,
-                          height: eventListHeight,
-                          child: Scrollbar(
-                            thumbVisibility: true,
-                            controller: _scrollController,
-                            scrollbarOrientation: ScrollbarOrientation.right,
-                            child: ListView.builder(
+                    if (snapshot.data!.isNotEmpty) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextStyleWidget(
+                            " ${snapshot.data!.length} Blood Donation Event(s)",
+                            dateTimeColor,
+                            textSize: 16,
+                            textWeight: FontWeight.bold,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            width: eventCardWidth,
+                            height: eventListHeight,
+                            child: Scrollbar(
+                              thumbVisibility: true,
                               controller: _scrollController,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, int index) {
-                                if (snapshot.connectionState ==
-                                        ConnectionState.done &&
-                                    snapshot.hasData) {
-                                  return Center(
-                                    child: CardWidget(snapshot.data![index]!),
-                                  );
-                                } else {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                              },
+                              scrollbarOrientation: ScrollbarOrientation.right,
+                              child: ListView.builder(
+                                controller: _scrollController,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, int index) {
+                                  if (snapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      snapshot.hasData) {
+                                    return Center(
+                                      child: CardWidget(snapshot.data![index]!),
+                                    );
+                                  } else {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
+                        ],
+                      );
+                    } else {
+                      return const SubTitleWidget();
+                    }
                   } else {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const TextStyleWidget(
-                          " 0 Blood Donation Event",
-                          dateTimeColor,
-                          textSize: 16,
-                          textWeight: FontWeight.bold,
-                        ),
-                        const SizedBox(
-                          height: 60,
-                        ),
-                        Center(
-                          child: Column(
-                            children: const [
-                              TextStyleWidget(
-                                "There is no blood",
-                                titleColor,
-                                textSize: 22,
-                                textWeight: FontWeight.bold,
-                              ),
-                              TextStyleWidget(
-                                "donation event",
-                                titleColor,
-                                textSize: 22,
-                                textWeight: FontWeight.bold,
-                              ),
-                              TextStyleWidget(
-                                "available for you",
-                                titleColor,
-                                textSize: 22,
-                                textWeight: FontWeight.bold,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
+                    return const SubTitleWidget();
                   }
                 } else {
                   return const CircularProgressIndicator();

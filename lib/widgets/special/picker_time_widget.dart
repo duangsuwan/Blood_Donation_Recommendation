@@ -10,6 +10,7 @@ class TimePickerWidget extends StatefulWidget {
   final String titleValue;
   final double textSize;
   final double pickerSize;
+  static TimeOfDay timeValue = getInitialTime();
 
   const TimePickerWidget(this.titleValue, this.textSize, this.pickerSize,
       {super.key});
@@ -17,14 +18,17 @@ class TimePickerWidget extends StatefulWidget {
   @override
   State<TimePickerWidget> createState() => _TimePickerWidgetState();
 
-  TimeOfDay getSelectedTime() {
-    return _TimePickerWidgetState().selectedTime;
+  static TimeOfDay getInitialTime() {
+    return TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
+  }
+
+  TimeOfDay getTimeFromPicker() {
+    return timeValue;
   }
 }
 
 class _TimePickerWidgetState extends State<TimePickerWidget> {
-  TimeOfDay selectedTime =
-      TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
+  TimeOfDay selectedTime = TimePickerWidget.timeValue;
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +62,17 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
   }
 
   void selectTime() async {
-    final newTime =
-        await showTimePicker(context: context, initialTime: selectedTime);
+    final newTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
 
     if (newTime == null) {
       return;
     }
     setState(() {
       selectedTime = newTime;
+      TimePickerWidget.timeValue = selectedTime;
     });
   }
 }

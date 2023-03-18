@@ -10,6 +10,7 @@ class DatePickerWidget extends StatefulWidget {
   final String titleValue;
   final double textSize;
   final double pickerSize;
+  static DateTime dateValue = getInitialDate();
 
   const DatePickerWidget(this.titleValue, this.textSize, this.pickerSize,
       {super.key});
@@ -17,13 +18,17 @@ class DatePickerWidget extends StatefulWidget {
   @override
   State<DatePickerWidget> createState() => _DatePickerWidgetState();
 
+  static DateTime getInitialDate() {
+    return DateTime.now();
+  }
+  
   DateTime getDateFromPicker() {
-    return _DatePickerWidgetState().selectedDate;
+    return dateValue;
   }
 }
 
 class _DatePickerWidgetState extends State<DatePickerWidget> {
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DatePickerWidget.dateValue;
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +62,11 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   }
 
   void selectDate() async {
-    final todayDate = DateTime.now();
     final newDate = await showDatePicker(
       context: context,
-      initialDate: todayDate,
-      firstDate: DateTime(todayDate.year - 5),
-      lastDate: DateTime(todayDate.year + 5),
+      initialDate: selectedDate,
+      firstDate: DateTime(selectedDate.year - 5),
+      lastDate: DateTime(selectedDate.year + 5),
     );
 
     if (newDate == null) {
@@ -70,6 +74,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     }
     setState(() {
       selectedDate = newDate;
+      DatePickerWidget.dateValue = selectedDate;
     });
   }
 }

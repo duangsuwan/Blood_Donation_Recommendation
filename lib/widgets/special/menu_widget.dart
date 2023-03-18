@@ -7,6 +7,8 @@ import 'package:blood_donation_recommendation/controllers/user_controller.dart';
 import 'package:blood_donation_recommendation/models/users.dart';
 import 'package:blood_donation_recommendation/widgets/common/image_widget.dart';
 import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.dart';
+import 'package:blood_donation_recommendation/widgets/special/picker_date_widget.dart';
+import 'package:blood_donation_recommendation/widgets/special/picker_time_widget.dart';
 import 'package:flutter/material.dart';
 
 class MenuWidget extends StatefulWidget {
@@ -89,6 +91,8 @@ class _MenuWidgetState extends State<MenuWidget> {
                       textWeight: FontWeight.bold,
                     ),
                     onTap: () {
+                      DatePickerWidget.dateValue = DatePickerWidget.getInitialDate();
+                      TimePickerWidget.timeValue = TimePickerWidget.getInitialTime();
                       Navigator.of(context).pushReplacementNamed(searchRoute);
                     },
                   ),
