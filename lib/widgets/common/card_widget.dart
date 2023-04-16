@@ -16,6 +16,14 @@ class CardWidget extends StatelessWidget {
         DateTimeConverter.getDateTime(eventRecord.startDateTime);
     String finishDateTime =
         DateTimeConverter.getDateTime(eventRecord.finishDateTime);
+    String trafficVolumeLevel = eventRecord.trafficLevel;
+    Color trafficLevelColor = heavyTrafficLevel;
+    if (trafficVolumeLevel == "light") {
+      trafficLevelColor = lightTrafficLevel;
+    }
+    else if (trafficVolumeLevel == "moderate") {
+      trafficLevelColor = moderateTrafficLevel;
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -117,16 +125,16 @@ class CardWidget extends StatelessWidget {
                             height: 12,
                           ),
                           Row(
-                            children: const [
-                              TextStyleWidget(
+                            children: [
+                              const TextStyleWidget(
                                 " Traffic Level:  ",
                                 conditionsMessageColor,
                                 textSize: 12,
                                 textWeight: FontWeight.bold,
                               ),
                               TextStyleWidget(
-                                "N/A",
-                                conditionsMessageColor,
+                                trafficVolumeLevel,
+                                trafficLevelColor,
                                 textSize: 12,
                                 textWeight: FontWeight.bold,
                               ),

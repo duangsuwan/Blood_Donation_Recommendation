@@ -49,8 +49,8 @@ class EventDatabaseAccess {
                 EventRecord.fromEventJson(context, docSnapshot))
             .toList();
         eventRecords.removeWhere((element) => (element!.finishDateTime.isBefore(selectedDateTime.toDate())));
-        TrafficLevelPredictionAPI.predictTrafficLevels(eventRecords, selectedDate, selectedTime);
-        return eventRecords;
+        final updatedEventRecords = TrafficLevelPredictionAPI.predictTrafficLevels(eventRecords, selectedDate, selectedTime);
+        return updatedEventRecords;
       }
     } catch (e) {
       await showErrorDialog(

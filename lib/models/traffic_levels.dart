@@ -39,13 +39,13 @@ class TrafficLevelPredictionResponse {
   TrafficLevelPredictionResponse(this.predictedTrafficLevel);
 
   factory TrafficLevelPredictionResponse.fromTrafficLevelPredictionResponseJson(Map<String, dynamic> data) {
-    final trafficLevelResult = data['prediction'] as String;
+    final trafficLevelResult = data['prediction'];
     return TrafficLevelPredictionResponse(trafficLevelResult);
   }
 }
 
 class TrafficLevelPredictionAPI {
-  static void predictTrafficLevels(List<EventRecord?> eventRecords, DateTime selectedDate, TimeOfDay selectedTime) async {
+  static Future<List<EventRecord?>> predictTrafficLevels(List<EventRecord?> eventRecords, DateTime selectedDate, TimeOfDay selectedTime) async {
     if (eventRecords.isNotEmpty) {
       String year = (selectedDate.year).toString();
       String month = (selectedDate.month).toString();
@@ -64,13 +64,11 @@ class TrafficLevelPredictionAPI {
         final url = Uri.https('bgsfx2a8tl.execute-api.us-east-2.amazonaws.com', '/blooddonationevents/displaytrafficlevels');
         final apiResponse = await http.post(url, body: apiRequest);
         if (apiResponse.statusCode == 200) {
-          final trafficLevelPredictionResponse = TrafficLevelPredictionResponse(apiResponse.body);
+          final trafficLevelPredictionResponse = TrafficLevelPredictionResponse.fromTrafficLevelPredictionResponseJson(json.decode(apiResponse.body));
           eventRecords[i]!.trafficLevel = trafficLevelPredictionResponse.predictedTrafficLevel;
-          print('eventRecords[].trafficLevel : ${eventRecords[i]!.trafficLevel}');
         }
-        //print('Response status: ${response.statusCode}');
-        //print('Response body: ${response.body}');
       }
     }
+    return eventRecords;
   }
 }
