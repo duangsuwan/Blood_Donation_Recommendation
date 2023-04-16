@@ -1,5 +1,6 @@
 import 'package:blood_donation_recommendation/constants/colors.dart';
 import 'package:blood_donation_recommendation/constants/sizes.dart';
+import 'package:blood_donation_recommendation/constants/messages.dart';
 import 'package:blood_donation_recommendation/controllers/datetime_controller.dart';
 import 'package:blood_donation_recommendation/models/events.dart';
 import 'package:blood_donation_recommendation/models/locations.dart';
@@ -16,13 +17,16 @@ class CardWidget extends StatelessWidget {
         DateTimeConverter.getDateTime(eventRecord.startDateTime);
     String finishDateTime =
         DateTimeConverter.getDateTime(eventRecord.finishDateTime);
-    String trafficVolumeLevel = eventRecord.trafficLevel;
-    Color trafficLevelColor = heavyTrafficLevel;
-    if (trafficVolumeLevel == "light") {
-      trafficLevelColor = lightTrafficLevel;
+    String trafficVolumeLevel = eventRecord.trafficLevelDescription;
+    Color trafficLevelColor = conditionsMessageColor;
+    if (trafficVolumeLevel == lightTrafficLevel) {
+      trafficLevelColor = lightTrafficLevelColor;
     }
-    else if (trafficVolumeLevel == "moderate") {
-      trafficLevelColor = moderateTrafficLevel;
+    else if (trafficVolumeLevel == moderateTrafficLevel) {
+      trafficLevelColor = moderateTrafficLevelColor;
+    }
+    else if (trafficVolumeLevel == heavyTrafficLevel) {
+      trafficLevelColor = heavyTrafficLevelColor;
     }
 
     return Padding(

@@ -18,8 +18,8 @@ const Color errorMessageColor = Color.fromARGB(255, 178, 34, 34);
 const Color dialogMessageColor = Colors.black;
 const Color dividerLineColor = Colors.black54;
 const Color eventDetailCard = Colors.white;
-const Color lightTrafficLevel = Color.fromARGB(255, 253, 216, 53);
-const Color moderateTrafficLevel = Color.fromARGB(255, 253, 133, 53);
-const Color heavyTrafficLevel = Color.fromARGB(255, 253, 53, 53);
+const Color lightTrafficLevelColor = Color.fromARGB(255, 253, 216, 53);
+const Color moderateTrafficLevelColor = Color.fromARGB(255, 253, 133, 53);
+const Color heavyTrafficLevelColor = Color.fromARGB(255, 253, 53, 53);
 
 

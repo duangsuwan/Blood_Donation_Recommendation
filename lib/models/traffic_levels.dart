@@ -1,4 +1,5 @@
 import 'package:blood_donation_recommendation/models/events.dart';
+import 'package:blood_donation_recommendation/constants/messages.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -65,8 +66,20 @@ class TrafficLevelPredictionAPI {
         final apiResponse = await http.post(url, body: apiRequest);
         if (apiResponse.statusCode == 200) {
           final trafficLevelPredictionResponse = TrafficLevelPredictionResponse.fromTrafficLevelPredictionResponseJson(json.decode(apiResponse.body));
-          eventRecords[i]!.trafficLevel = trafficLevelPredictionResponse.predictedTrafficLevel;
+          if (trafficLevelPredictionResponse.predictedTrafficLevel == lightTrafficLevel) {
+            eventRecords[i]!.trafficLevelId = 0;
+          }
+          else if (trafficLevelPredictionResponse.predictedTrafficLevel == moderateTrafficLevel) {
+            eventRecords[i]!.trafficLevelId = 1;
+          }
+          else if (trafficLevelPredictionResponse.predictedTrafficLevel == heavyTrafficLevel) {
+            eventRecords[i]!.trafficLevelId = 2;
+          }
+          eventRecords[i]!.trafficLevelDescription = trafficLevelPredictionResponse.predictedTrafficLevel;
         }
+      }
+      if (eventRecords.length > 1) {
+        eventRecords.sort(((a, b) => a!.trafficLevelId.compareTo(b!.trafficLevelId)));
       }
     }
     return eventRecords;

@@ -7,3 +7,8 @@ const String errorMessageSecondaryPassword = "Password Mismatch";
 
 RegExp emailRegularExpression = RegExp(r"^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+(\.[a-zA-Z0-9_-]+)*@[^-][a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,5})$");
 RegExp passwordRegularExpression = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!%@#\$&*~]).{8,}$');
+
+
+const String lightTrafficLevel = "light";
+const String moderateTrafficLevel = "moderate";
+const String heavyTrafficLevel = "heavy";

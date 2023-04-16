@@ -10,10 +10,11 @@ class EventRecord {
   String eventLocation;
   DateTime startDateTime;
   DateTime finishDateTime;
-  String trafficLevel;
+  int trafficLevelId;
+  String trafficLevelDescription;
 
   EventRecord(this.eventId, this.eventName, this.eventLocation,
-      this.startDateTime, this.finishDateTime, {this.trafficLevel = "N/A"});
+      this.startDateTime, this.finishDateTime, {this.trafficLevelId = 3, this.trafficLevelDescription = "N/A"});
 
   static EventRecord? fromEventJson(
       BuildContext context, DocumentSnapshot<Map<String, dynamic>> snapshot) {
