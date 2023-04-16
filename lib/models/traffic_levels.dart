@@ -15,6 +15,7 @@ class TrafficLevelPredictionRequest {
 }
 
 class TrafficLevelPredictionBody {
+  String eventId;
   String junction;
   String year;
   String month;
@@ -22,9 +23,10 @@ class TrafficLevelPredictionBody {
   String dayOfWeek;
   String hour;
 
-  TrafficLevelPredictionBody(this.junction, this.year, this.month, this.date, this.dayOfWeek, this.hour);
+  TrafficLevelPredictionBody(this.eventId, this.junction, this.year, this.month, this.date, this.dayOfWeek, this.hour);
 
   Map<String, dynamic> toTrafficLevelPredictionBodyJson() => {
+    'eventId': eventId,
     'junction': junction,
     'year': year,
     'month': month,
@@ -35,18 +37,20 @@ class TrafficLevelPredictionBody {
 }
 
 class TrafficLevelPredictionResponse {
+  final String eventId;
   final String predictedTrafficLevel;
 
-  TrafficLevelPredictionResponse(this.predictedTrafficLevel);
+  TrafficLevelPredictionResponse(this.eventId, this.predictedTrafficLevel);
 
   factory TrafficLevelPredictionResponse.fromTrafficLevelPredictionResponseJson(Map<String, dynamic> data) {
+    final eventId = data['eventId'];
     final trafficLevelResult = data['prediction'];
-    return TrafficLevelPredictionResponse(trafficLevelResult);
+    return TrafficLevelPredictionResponse(eventId, trafficLevelResult);
   }
 }
 
 class TrafficLevelPredictionAPI {
-  static Future<List<EventRecord?>> predictTrafficLevels(List<EventRecord?> eventRecords, DateTime selectedDate, TimeOfDay selectedTime) async {
+  Future<List<EventRecord?>> predictTrafficLevels(List<EventRecord?> eventRecords, DateTime selectedDate, TimeOfDay selectedTime) async {
     if (eventRecords.isNotEmpty) {
       String year = (selectedDate.year).toString();
       String month = (selectedDate.month).toString();
@@ -57,25 +61,41 @@ class TrafficLevelPredictionAPI {
         selectedHour = selectedHour + 1;
       }
       String hour = (selectedHour).toString();
-      for (int i=0; i < eventRecords.length; i++) {
+      List<String> apiRequests = [];
+      for (int i=0; i<eventRecords.length; i++) {
+        String eventId = eventRecords[i]!.eventId;
         String junction = eventRecords[i]!.eventLocation;
-        final predictionBody = TrafficLevelPredictionBody(junction, year, month, date, dayOfWeek, hour); 
+        final predictionBody = TrafficLevelPredictionBody(eventId, junction, year, month, date, dayOfWeek, hour); 
         final predictionRequest = TrafficLevelPredictionRequest(predictionBody);
-        String apiRequest = jsonEncode(predictionRequest.toTrafficLevelPredictionRequestJson());
-        final url = Uri.https('bgsfx2a8tl.execute-api.us-east-2.amazonaws.com', '/blooddonationevents/displaytrafficlevels');
-        final apiResponse = await http.post(url, body: apiRequest);
-        if (apiResponse.statusCode == 200) {
-          final trafficLevelPredictionResponse = TrafficLevelPredictionResponse.fromTrafficLevelPredictionResponseJson(json.decode(apiResponse.body));
-          if (trafficLevelPredictionResponse.predictedTrafficLevel == lightTrafficLevel) {
-            eventRecords[i]!.trafficLevelId = 0;
+        apiRequests.add(jsonEncode(predictionRequest.toTrafficLevelPredictionRequestJson()));
+      }
+      TrafficLevelPredictionResponse? trafficLevelPredictionResponse;
+      List<TrafficLevelPredictionResponse> trafficLevelPredictionResponses = [];
+      await Future.forEach(apiRequests, (apiRequest) async {
+        trafficLevelPredictionResponse = await connectWithAPI(apiRequest);
+        if (trafficLevelPredictionResponse != null) {
+          trafficLevelPredictionResponses.add(trafficLevelPredictionResponse!);
+        }
+      });
+      if (trafficLevelPredictionResponses.isNotEmpty) {
+        for (int i=0; i<trafficLevelPredictionResponses.length; i++) {
+          for (int j=0; j<eventRecords.length; j++) {
+            if (trafficLevelPredictionResponses[i].eventId == eventRecords[j]!.eventId && trafficLevelPredictionResponses[i].predictedTrafficLevel == lightTrafficLevel) {
+              eventRecords[j]!.trafficLevelId = 0;
+              eventRecords[j]!.trafficLevelDescription = trafficLevelPredictionResponses[i].predictedTrafficLevel;
+              break;
+            }
+            else if (trafficLevelPredictionResponses[i].eventId == eventRecords[j]!.eventId && trafficLevelPredictionResponses[i].predictedTrafficLevel == moderateTrafficLevel) {
+              eventRecords[j]!.trafficLevelId = 1;
+              eventRecords[j]!.trafficLevelDescription = trafficLevelPredictionResponses[i].predictedTrafficLevel;
+              break;
+            }
+            else if (trafficLevelPredictionResponses[i].eventId == eventRecords[j]!.eventId && trafficLevelPredictionResponses[i].predictedTrafficLevel == heavyTrafficLevel) {
+              eventRecords[j]!.trafficLevelId = 2;
+              eventRecords[j]!.trafficLevelDescription = trafficLevelPredictionResponses[i].predictedTrafficLevel;
+              break;
+            }
           }
-          else if (trafficLevelPredictionResponse.predictedTrafficLevel == moderateTrafficLevel) {
-            eventRecords[i]!.trafficLevelId = 1;
-          }
-          else if (trafficLevelPredictionResponse.predictedTrafficLevel == heavyTrafficLevel) {
-            eventRecords[i]!.trafficLevelId = 2;
-          }
-          eventRecords[i]!.trafficLevelDescription = trafficLevelPredictionResponse.predictedTrafficLevel;
         }
       }
       if (eventRecords.length > 1) {
@@ -83,5 +103,15 @@ class TrafficLevelPredictionAPI {
       }
     }
     return eventRecords;
+  }
+
+  Future<TrafficLevelPredictionResponse?> connectWithAPI(String apiRequest) async {
+    final url = Uri.https('bgsfx2a8tl.execute-api.us-east-2.amazonaws.com', '/blooddonationevents/displaytrafficlevels');
+    final apiResponse = await http.post(url, body: apiRequest);
+    if (apiResponse.statusCode == 200) {
+      final trafficLevelPredictionResponse = TrafficLevelPredictionResponse.fromTrafficLevelPredictionResponseJson(json.decode(apiResponse.body));
+      return trafficLevelPredictionResponse;
+    }
+    return null;
   }
 }
