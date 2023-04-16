@@ -1,4 +1,5 @@
 import 'package:blood_donation_recommendation/controllers/datetime_controller.dart';
+import 'package:blood_donation_recommendation/models/traffic_levels.dart';
 import 'package:blood_donation_recommendation/utilities/error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,9 +10,10 @@ class EventRecord {
   String eventLocation;
   DateTime startDateTime;
   DateTime finishDateTime;
+  String trafficLevel;
 
   EventRecord(this.eventId, this.eventName, this.eventLocation,
-      this.startDateTime, this.finishDateTime);
+      this.startDateTime, this.finishDateTime, {this.trafficLevel = "N/A"});
 
   static EventRecord? fromEventJson(
       BuildContext context, DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -42,12 +44,13 @@ class EventDatabaseAccess {
           .orderBy("start time")
           .get();
       if (eventDocument.docs.isNotEmpty) {
-        final eventRecord = eventDocument.docs
+        final eventRecords = eventDocument.docs
             .map((docSnapshot) =>
                 EventRecord.fromEventJson(context, docSnapshot))
             .toList();
-        eventRecord.removeWhere((element) => (element!.finishDateTime.isBefore(selectedDateTime.toDate())));
-        return eventRecord;
+        eventRecords.removeWhere((element) => (element!.finishDateTime.isBefore(selectedDateTime.toDate())));
+        TrafficLevelPredictionAPI.predictTrafficLevels(eventRecords, selectedDate, selectedTime);
+        return eventRecords;
       }
     } catch (e) {
       await showErrorDialog(
