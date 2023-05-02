@@ -1,16 +1,10 @@
-# blood_donation_recommendation
+# Blood Donation Event Recommendation Application
 
-A new Flutter project.
+The application recommends available blood donation events based on numbers of vehicles on the roads where blood donation events are located. 
+It uses a simulated road traffic dataset to forecast the traffic volume of those events, and then display the events arranged from the least 
+to the busiest routes. This project is inspired by the idea that we can save more lives if we can encourage more people to donate blood. 
+Since we are preoccupied with our own schedules and not be aware of the ongoing blood donation campaigns, it would be helpful that we can 
+find blood donation events that can be fit into our schedules and we also know that we do not need to spend much time traveling to those sites.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
