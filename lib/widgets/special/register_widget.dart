@@ -4,6 +4,8 @@ import 'package:blood_donation_recommendation/constants/messages.dart';
 import 'package:blood_donation_recommendation/controllers/user_controller.dart';
 import 'package:blood_donation_recommendation/views/user_agreement_page.dart';
 import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.dart';
+import 'package:blood_donation_recommendation/widgets/special/picker_date_widget.dart';
+import 'package:blood_donation_recommendation/widgets/special/picker_time_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_donation_recommendation/widgets/common/textfield_widget.dart';
@@ -178,6 +180,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               textSize: mainButtonSize,
               textWeight: FontWeight.bold,
               onPressed: () {
+                DatePickerWidget.dateValue = DatePickerWidget.getInitialDate();
+                TimePickerWidget.timeValue = TimePickerWidget.getInitialTime();
                 tryRegisterUser(
                     context,
                     _nameController.text.trim(),

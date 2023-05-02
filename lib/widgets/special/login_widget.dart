@@ -4,6 +4,8 @@ import 'package:blood_donation_recommendation/constants/sizes.dart';
 import 'package:blood_donation_recommendation/constants/messages.dart';
 import 'package:blood_donation_recommendation/views/forgot_password_page.dart';
 import 'package:blood_donation_recommendation/widgets/common/textstyle_widget.dart';
+import 'package:blood_donation_recommendation/widgets/special/picker_date_widget.dart';
+import 'package:blood_donation_recommendation/widgets/special/picker_time_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_donation_recommendation/widgets/common/textfield_widget.dart';
 import 'package:blood_donation_recommendation/widgets/common/button_widget.dart';
@@ -107,6 +109,8 @@ class _LogInWidgetState extends State<LogInWidget> {
               textSize: mainButtonSize,
               textWeight: FontWeight.bold,
               onPressed: () {
+                DatePickerWidget.dateValue = DatePickerWidget.getInitialDate();
+                TimePickerWidget.timeValue = TimePickerWidget.getInitialTime();
                 tryLogIn(context, _emailController.text.trim(),
                     _passwordController.text.trim());
               },
